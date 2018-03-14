@@ -22,10 +22,9 @@ import utils.Utils;
 public class SubClassTransformation {
 
 	public static void main(String... strings) throws InvalidFormatException, IOException {
-		File metaDataFiles = new File(
-				"C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\SubClassTests\\");
-		String infoCardTypeColumn = "Infocard Type";
-		String infoCardSubTypeColumn = "Infocard SubType";
+		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\all master control metadata\\");
+		String infoCardTypeColumn = "Doc Type";
+		String infoCardSubTypeColumn = "Doc Sub Type";
 		String documentNumberColumn = "Document #";
 
 		File transformationFile = null;
@@ -37,13 +36,12 @@ public class SubClassTransformation {
 	public static List<Integer> dates = new ArrayList<>();
 
 	static {
+		dates.add(10);
 		dates.add(11);
 		dates.add(12);
-		dates.add(13);
 	}
 
-	public static Map<String, Map<String, String>> loadListData(File transformationFile)
-			throws IOException, InvalidFormatException {
+	public static Map<String, Map<String, String>> loadListData(File transformationFile) throws IOException, InvalidFormatException {
 		Map<String, Map<String, String>> transformationData = new HashMap<>();
 		try (Workbook listDataWorkbook = Utils.getWorkBook(transformationFile)) {
 			Sheet dataListSheet = listDataWorkbook.getSheetAt(0);
@@ -90,8 +88,8 @@ public class SubClassTransformation {
 		return transformationData;
 	}
 
-	public static void processData(File metaDataFiles, File transformationFile, String infoCardTypeColumn,
-			String infoCardSubTypeColumn, String documentNumberColumn) throws InvalidFormatException, IOException {
+	public static void processData(File metaDataFiles, File transformationFile, String infoCardTypeColumn, String infoCardSubTypeColumn,
+			String documentNumberColumn) throws InvalidFormatException, IOException {
 
 		Map<String, Map<String, String>> listData = null;
 		Map<Integer, String> columnsToCheck = null;
@@ -173,8 +171,7 @@ public class SubClassTransformation {
 											if (createCell != null) {
 												String valueString = Utils.returnCellValueAsString(createCell);
 												if (listData.get(columnsToCheck.get(c)).containsKey(valueString)) {
-													createCell.setCellValue(
-															listData.get(columnsToCheck.get(c)).get(valueString));
+													createCell.setCellValue(listData.get(columnsToCheck.get(c)).get(valueString));
 												}
 
 											}
@@ -223,8 +220,8 @@ public class SubClassTransformation {
 	}
 
 	/**
-	 * Gets all the cells from dataRow and copys them in writeToRow, basically it
-	 * copies the whole row, but skips the first one to allow to put the subClass
+	 * Gets all the cells from dataRow and copys them in writeToRow, basically it copies the whole row, but skips the first one to allow to put the
+	 * subClass
 	 * 
 	 * @param writeToRow
 	 * @param dataRow
