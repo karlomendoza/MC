@@ -22,10 +22,10 @@ import utils.Utils;
 public class SubClassTransformation {
 
 	public static void main(String... strings) throws InvalidFormatException, IOException {
-		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\all master control metadata\\");
+		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\T2\\metadata\\");
 		String infoCardTypeColumn = "Doc Type";
 		String infoCardSubTypeColumn = "Doc Sub Type";
-		String documentNumberColumn = "Document #";
+		String documentNumberColumn = "Document .";
 
 		File transformationFile = null;
 
@@ -146,11 +146,17 @@ public class SubClassTransformation {
 						setCellsValuesToRow(createRow, headerRow, cols);
 					}
 
+					String documentNumberPrev = "";
 					for (int r = 0; r < rows; r++) {
 						row = readSheet.getRow(r);
 						if (row != null) {
 							// if it's not the header
 							if (r > 0) {
+
+								if (documentNumberPrev.equals(Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber)))) {
+									continue;
+								}
+								documentNumberPrev = Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber));
 
 								String transformTo = MasterControlSubclassTransformationRules.subClassTransformation(
 										Utils.returnCellValueAsString(row.getCell((int) infoCardTypeColumnNumber)),
