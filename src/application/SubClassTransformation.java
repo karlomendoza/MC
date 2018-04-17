@@ -22,14 +22,17 @@ import utils.Utils;
 public class SubClassTransformation {
 
 	public static void main(String... strings) throws InvalidFormatException, IOException {
-		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\T2\\metadata\\");
+		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\T4\\Extract\\");
 		String infoCardTypeColumn = "Doc Type";
 		String infoCardSubTypeColumn = "Doc Sub Type";
 		String documentNumberColumn = "Document .";
+		String revColumn = "Rev";
+
+		boolean removeDuplicates = Boolean.FALSE;
 
 		File transformationFile = null;
 
-		processData(metaDataFiles, transformationFile, infoCardTypeColumn, infoCardSubTypeColumn, documentNumberColumn);
+		processData(metaDataFiles, transformationFile, infoCardTypeColumn, infoCardSubTypeColumn, documentNumberColumn, revColumn, removeDuplicates);
 	}
 
 	public static CellStyle cellStyle;
@@ -89,7 +92,7 @@ public class SubClassTransformation {
 	}
 
 	public static void processData(File metaDataFiles, File transformationFile, String infoCardTypeColumn, String infoCardSubTypeColumn,
-			String documentNumberColumn) throws InvalidFormatException, IOException {
+			String documentNumberColumn, String revColumn, boolean removeDuplicates) throws InvalidFormatException, IOException {
 
 		Map<String, Map<String, String>> listData = null;
 		Map<Integer, String> columnsToCheck = null;
@@ -138,6 +141,7 @@ public class SubClassTransformation {
 					int documentNumberColumnNumber = -1;
 					int infoCardTypeColumnNumber = -1;
 					int infoCardSubTypeColumnNumber = -1;
+					int revColumnNumber = -1;
 
 					if (writeSheet.getPhysicalNumberOfRows() == 0) {
 						Row createRow = writeSheet.createRow(0);
@@ -153,9 +157,40 @@ public class SubClassTransformation {
 							// if it's not the header
 							if (r > 0) {
 
-								if (documentNumberPrev.equals(Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber)))) {
+								if (removeDuplicates) {
+									if (documentNumberPrev.equals(Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber)))) {
+										System.out.println("Duplicated Document #: " + documentNumberPrev);
+										continue;
+									}
+								}
+								if (Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber)).startsWith("BOM")) {
+									System.out.println("Document is a BOM, not including it #: "
+											+ Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber)));
 									continue;
 								}
+
+								String rev = Utils.returnCellValueAsString(row.getCell((int) revColumnNumber));
+								String revFormated = "";
+								if (rev.length() == 1 && !rev.startsWith("0")) {
+									revFormated = "01";
+								}
+								if (rev.length() == 1 && !rev.startsWith("0")) {
+									revFormated = "01";
+								}
+								if (rev.contains(".") && Double.valueOf(rev) <= 1) {
+									revFormated = "01";
+								}
+								if (rev.contains(".") && Double.valueOf(rev) >= 1 && Double.valueOf(rev) < 10) {
+									revFormated = "0" + String.valueOf(Math.round(Double.valueOf(rev)));
+								}
+								if (rev.contains(".") && Double.valueOf(rev) >= 1 && Double.valueOf(rev) >= 10) {
+									revFormated = String.valueOf(Math.round(Double.valueOf(rev)));
+								}
+
+								if (Utils.returnCellValueAsString(row.getCell((int) revColumnNumber)).length() >= 4) {
+									revFormated = "01";
+								}
+
 								documentNumberPrev = Utils.returnCellValueAsString(row.getCell((int) documentNumberColumnNumber));
 
 								String transformTo = MasterControlSubclassTransformationRules.subClassTransformation(
@@ -200,6 +235,9 @@ public class SubClassTransformation {
 										}
 										if (valueString.equals(infoCardSubTypeColumn)) {
 											infoCardSubTypeColumnNumber = c;
+										}
+										if (valueString.equals(revColumn)) {
+											revColumnNumber = c;
 										}
 
 										// one on one transformation stuff
