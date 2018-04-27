@@ -22,13 +22,15 @@ import utils.Utils;
 public class SubClassTransformation {
 
 	public static void main(String... strings) throws InvalidFormatException, IOException {
-		File metaDataFiles = new File("C:\\Users\\Karlo Mendoza\\Excel Work\\ICU MEDICAL\\Master Control\\T4\\Extract\\");
+		File metaDataFiles = new File(
+				"C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\Round 2\\T4\\Extract\\");
 		String infoCardTypeColumn = "Doc Type";
 		String infoCardSubTypeColumn = "Doc Sub Type";
 		String documentNumberColumn = "Document .";
 		String revColumn = "Rev";
 
-		boolean removeDuplicates = Boolean.FALSE;
+		// Indicates if duplicated document numbers should be removed, true for documents import, false when doing the fileLoad import process
+		boolean removeDuplicates = Boolean.TRUE;
 
 		File transformationFile = null;
 
