@@ -23,14 +23,14 @@ public class SubClassTransformation {
 
 	public static void main(String... strings) throws InvalidFormatException, IOException {
 		File metaDataFiles = new File(
-				"C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\Round 2\\T4\\Extract\\");
+				"C:\\Users\\Karlo Mendoza\\Box Sync\\Clients\\ICU Medical\\ICU Medical PLM Implementation\\Workstreams\\Program Data Migration\\Data Files\\MasterControl\\PreparationForRelease\\attachments\\extract\\");
 		String infoCardTypeColumn = "Doc Type";
 		String infoCardSubTypeColumn = "Doc Sub Type";
 		String documentNumberColumn = "Document .";
 		String revColumn = "Rev";
 
 		// Indicates if duplicated document numbers should be removed, true for documents import, false when doing the fileLoad import process
-		boolean removeDuplicates = Boolean.TRUE;
+		boolean removeDuplicates = Boolean.FALSE;
 
 		File transformationFile = null;
 
